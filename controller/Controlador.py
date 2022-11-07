@@ -82,3 +82,17 @@ class Controlador:
         return palabra
 
 
+    def retornarListaDirectores(self): #punto 4
+
+        listaDirectores = [
+            "Luisa Fernanda Rincon",
+            "Juan Carlos Martinez",
+            "Maria Constanza Pabón",
+            "Gloria Inés Álvarez",
+            "Gerardo M Sarria M",
+            "Luis Eduardo Tobón",
+            "Juan Pablo García",
+            "Frank Martinez",
+            "Carlos Ramirez"]
+
+        return listaDirectores
