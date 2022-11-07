@@ -8,7 +8,7 @@ import streamlit as st
 
 from streamlit_option_menu import option_menu
 from controller.Controlador import Controlador
-from view.EvaluacionActaPartial import ver_historico_acta, agregar_acta, evaluar_criterios, exportar_acta
+from view.EvaluacionActaPartial import ver_historico_acta, agregar_acta, evaluar_criterios, exportar_acta, ver_estadisticas
 
 # Este archivo contiene las funcionalidades de la vista relacionado con la evaluación de las actas
 
@@ -72,7 +72,7 @@ class MainView:
         elif self.menu_actual == "Exportar Acta":
             exportar_acta(st, self.controller)
         elif self.menu_actual == "Estadisticas":
-            exportar_acta(st, self.controller)
+            ver_estadisticas(st, self.controller)
 
 
 # Main call

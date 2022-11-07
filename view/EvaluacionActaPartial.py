@@ -21,10 +21,8 @@ def agregar_acta(st, controlador):
     with col3:
         info_acta_obj.tipo_trabajo = st.selectbox('Tipo', ('Aplicado', 'Investigación'))
 
-        if info_acta_obj.tipo_trabajo == 'Aplicado':
-            info_acta_obj.cantidadProyectos +=1
-        if info_acta_obj.tipo_trabajo == 'Investigación':
-            info_acta_obj.cantidadInvestigaciones += 1
+
+
     with col5: #punto 5
         info_acta_obj.director = st.selectbox("Escoja un director", (controlador.retornarListaDirectores()[0],controlador.retornarListaDirectores()[1],controlador.retornarListaDirectores()[2],controlador.retornarListaDirectores()[3],controlador.retornarListaDirectores()[4],controlador.retornarListaDirectores()[5],controlador.retornarListaDirectores()[6],controlador.retornarListaDirectores()[7],controlador.retornarListaDirectores()[8]))
     with col6:
@@ -35,18 +33,13 @@ def agregar_acta(st, controlador):
         info_acta_obj.jurado1Escoger == st.checkbox('Interno', key = "interno1") #punto6
         info_acta_obj.jurado1Escoger == st.checkbox('Externo', key = "Externo1")
 
-        if info_acta_obj.jurado1Escoger:
-            info_acta_obj.cantidadJuradosInternos +=1
-        else:
-            info_acta_obj.cantidadJuradosExternos += 1
+
     with col8:
         info_acta_obj.jurado2 = st.text_input("Jurado #2")
         info_acta_obj.jurado2Escoger = st.checkbox('Interno')#punto6
         info_acta_obj.jurado2Escoger = st.checkbox('Externo')
-        if info_acta_obj.jurado2Escoger:
-            info_acta_obj.cantidadJuradosInternos +=1
-        else:
-            info_acta_obj.cantidadJuradosExternos += 1
+
+
 
     with col9: #punto 3
         info_acta_obj.fecha_presentacion = st.date_input("Fecha presentacion", date(2022, 11, 6))
@@ -56,13 +49,15 @@ def agregar_acta(st, controlador):
     if enviado_btn and info_acta_obj.autor != "" and info_acta_obj.nombre_trabajo != "" and info_acta_obj.director != "" \
             and info_acta_obj.jurado1 != "" and info_acta_obj.jurado2 != "":
         controlador.agregar_evaluacion(info_acta_obj)
-        st.success("Acta Agregada Exitosamente.") #######
+        st.success("Acta Agregada Exitosamente.")
+
     elif enviado_btn:
         st.error("Llene Todos Los Campos Vacíos.")
     else:
         st.info("No Deje Ningún Espacio En Blanco En Los Datos")
     # Retorna el controlador pq solo las colecciones se pasan en python por referencia,
     # entonces de esta manera se actualiza el controlador en la vista principal
+
     return controlador
 
 
@@ -171,12 +166,46 @@ def evaluar_criterios(st, controlador):
         else:
             st.info("Llene Todos Los Campos Vacíos.")
 
-#def estadisticas(st, controlador):
-    #info_acta_obj = InfoActa(controlador.criterios)
-    #controlador.
+
+def ver_estadisticas(st, controlador):
+    cantidadProyectosAplicados = 0  # punto 10
+    cantidadInvestigaciones = 0  # punto 10
+    cantidadJuradosExternos = 0
+    cantidadJuradosInternos = 0
+    cantidadNotaSuperior = 0
 
 
 
+    for acta in controlador.actas:
+        if acta.tipo_trabajo == "Aplicado":
+            cantidadProyectosAplicados +=1
+        else:
+            cantidadInvestigaciones +=1
+
+
+        if acta.jurado1Escoger == 'Interno' or acta.jurado2Escoger == 'Interno':
+            cantidadJuradosInternos += 1
+
+        if acta.jurado1Escoger == 'Externo' or acta.jurado2Escoger == 'Externo':
+            cantidadJuradosExternos += 1
+
+        if acta.nota_final > 4.8:
+            cantidadNotaSuperior +=1
+
+
+
+    st.title("Estádisticas generales")
+
+    st.metric("Proyectos Aplicados",value = cantidadProyectosAplicados,
+    delta_color="inverse")
+    st.metric("Proyectos de Investigacion", value=cantidadInvestigaciones,
+              delta_color="inverse")
+    st.metric("Cantidad jurados internos", value=cantidadJuradosInternos,
+              delta_color="inverse")
+    st.metric("Cantidad jurados externos", value=cantidadJuradosExternos,
+              delta_color="inverse")
+    st.metric("Cantidad de proyectos con nota superior a 4.8", value=cantidadNotaSuperior,
+              delta_color="inverse")
 
 
 def exportar_acta(st, controlador):
@@ -195,3 +224,6 @@ def exportar_acta(st, controlador):
 
     if len(controlador.actas) == 0:
         st.warning("No Hay Ningún Estudiante Calificado Actualmente.")
+
+
+
